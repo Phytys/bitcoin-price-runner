@@ -1,47 +1,67 @@
 # backend.py
-from flask import Flask, render_template, jsonify, make_response, send_from_directory
+from flask import Flask, render_template, jsonify, make_response, send_from_directory, request
 from flask_caching import Cache
 from datetime import datetime, timedelta, timezone
 import os
 import logging
 import traceback
-from utils import complete_bitcoin_data, obstacles_drawdowns_weekly, get_bitcoin_events, get_random_bitcoin_data 
-from models import db, LeaderboardEntry
+from utils import complete_bitcoin_data, obstacles_drawdowns_weekly, get_bitcoin_events, get_random_bitcoin_data
 from dotenv import load_dotenv
-from flask import request
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 import redis
 from config import config
+from flask_migrate import Migrate
 
 load_dotenv()
+print(f"FLASK_DEBUG environment variable: '{os.environ.get('FLASK_DEBUG')}'")
 
 app = Flask(__name__)
-
-csrf = CSRFProtect(app)
 
 # Use settings from config.py
 config_name = os.getenv('FLASK_ENV', 'development')
 app.config.from_object(config[config_name])
 
-db.init_app(app)
-
+# Initialize extensions
+csrf = CSRFProtect(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
+# Import db and models
+from models import db, LeaderboardEntry
+
+# Initialize the database with the app
+db.init_app(app)
+migrate = Migrate(app, db)
+
+# Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Modify the Redis setup
 redis_url = app.config['REDIS_URL']
-redis_client = redis.from_url(redis_url) if redis_url and redis_url != 'local' else None
+if redis_url == 'local':
+    redis_client = None
+else:
+    redis_client = redis.from_url(redis_url)
 
-limiter = Limiter(
-    app=app,
-    key_func=get_remote_address,
-    storage_uri=redis_url if redis_url and redis_url != 'local' else None,
-    storage_options={"client": redis_client} if redis_client else {}
-)
+if redis_client:
+    limiter = Limiter(
+        app=app,
+        key_func=get_remote_address,
+        storage_uri=redis_url,
+        storage_options={"client": redis_client}
+    )
+else:
+    limiter = Limiter(
+        app=app,
+        key_func=get_remote_address
+    )
+
+# Integrate WhiteNoise to serve static files in production
+if config_name == 'production':
+    from whitenoise import WhiteNoise
+    app.wsgi_app = WhiteNoise(app.wsgi_app, root='static/')
 
 def handle_error(error):
     error_message = str(error)
@@ -53,7 +73,7 @@ def handle_error(error):
 def handle_exception(e):
     return handle_error(e)
 
-@cache.memoize(timeout=3600)  # Cache 
+@cache.memoize(timeout=3600)  # Cache
 def cached_complete_bitcoin_data(ma=7):
     return complete_bitcoin_data(ma)
 
@@ -61,7 +81,7 @@ def cached_complete_bitcoin_data(ma=7):
 def cached_obstacles_data(drawdown_percentage=0.1):
     return obstacles_drawdowns_weekly(drawdown_percentage)
 
-@cache.memoize(timeout=3600)  # Cache 
+@cache.memoize(timeout=3600)  # Cache
 def cached_bitcoin_events():
     return get_bitcoin_events()
 
@@ -134,7 +154,7 @@ def enemies_data():
         # Use the cached complete Bitcoin data
         df = cached_complete_bitcoin_data(ma=7)
 
-        # Get 50 random rows using the new function
+        # Get random rows using the new function
         random_df = get_random_bitcoin_data(df=df, n=NUM_ENEMIES)
 
         # Select relevant columns
@@ -184,8 +204,7 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
-
-# For database integeration and leaderboard feature
+# For database integration and leaderboard feature
 # Route to submit a score
 @app.route('/submit_score', methods=['POST'])
 @limiter.limit("5 per minute")
@@ -244,11 +263,10 @@ def leaderboard():
 
 @app.route('/test_redis')
 def test_redis():
-    if redis_url and redis_url != 'local':
+    if redis_client:
         try:
-            client = redis.from_url(redis_url)
-            client.set('test_key', 'test_value')
-            value = client.get('test_key')
+            redis_client.set('test_key', 'test_value')
+            value = redis_client.get('test_key')
             return jsonify({'redis_test': value.decode('utf-8')})
         except Exception as e:
             return jsonify({'error': f"Redis error: {str(e)}"}), 500
@@ -256,6 +274,4 @@ def test_redis():
         return jsonify({'message': 'Using local development mode without Redis.'})
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=app.config['DEBUG'])

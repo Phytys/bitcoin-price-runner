@@ -1,22 +1,12 @@
-Heruku
+Just some notes here..
+--------------------------------
+FLASK_APP Environment Variable Set:
+Flask needs to know which file contains your application instance.
 
-Set up environment variables:
-You'll need to set up your environment variables in Heroku.
-You can do this through the Heroku dashboard or using the Heroku CLI.
-Make sure to set:
-- SECRET_KEY
-- FLASK_ENV (set to 'production')
-- Any other environment variables your app uses
+Temporary Setting (for current session):
+# For PowerShell on Windows
+$Env:FLASK_APP = "app.py"
 
-
-Configure Redis:
-If you're using Redis in production,
- you'll need to provision a Redis add-on in Heroku 
- and update your REDIS_URL configuration accordingly.
-
-
-
-
-git init
-git add .
-git commit -m "Initial commit for Heroku deployment"
+Permanent Setting:
+You can add the above line to your virtual environment's activation script 
+(Activate.ps1) to set it automatically each time you activate the environment.
