@@ -1,0 +1,7 @@
+# .gitignore
+.env
+*.db
+__pycache__/
+test*
+.cursorrules
+app.db

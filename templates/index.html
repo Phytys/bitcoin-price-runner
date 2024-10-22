@@ -1,0 +1,183 @@
+<!-- templates/index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bitcoin Price Runner Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Link to the CSS file -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Include any required fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Experience the thrill of Bitcoin's price history in this exciting runner game. Navigate through highs and lows, avoid obstacles, and learn about Bitcoin events.">
+    <meta property="og:title" content="Bitcoin Price Runner - Experience Bitcoin's Journey">
+    <meta property="og:description" content="Navigate through the highs and lows of Bitcoin's price history in this exciting runner game.">
+    <meta property="og:image" content="{{ url_for('static', filename='assets/images/large/game-screenshot.png', _external=True) }}">
+    <meta property="og:url" content="https://bitcoinpricerunner.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bitcoin Price Runner - Experience Bitcoin's Journey">
+    <meta name="twitter:description" content="Navigate through the highs and lows of Bitcoin's price history in this exciting runner game.">
+    <meta name="twitter:image" content="{{ url_for('static', filename='assets/images/large/game-screenshot.png', _external=True) }}">
+    <link rel="canonical" href="https://bitcoinpricerunner.com">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoGame",
+      "name": "Bitcoin Price Runner",
+      "description": "Navigate through the highs and lows of Bitcoin's price history in this exciting runner game.",
+      "genre": ["Runner", "Educational"],
+      "gamePlatform": ["Web Browser", "Mobile Web"],
+      "url": "https://bitcoinpricerunner.com/game",
+      "author": {
+        "@type": "Organization",
+        "name": "Glenn"
+      },
+      "datePublished": "2024-10-22",
+      "operatingSystem": "Web"
+    }
+    </script>
+</head>
+<body>
+    <header class="header">
+        <div class="container nav">
+            <img src="{{ url_for('static', filename='assets/images/large/logo/bitcoin_logo.png') }}" alt="Bitcoin Logo" class="logo-image">
+            <h1 class="logo">Bitcoin Price Runner</h1>
+            <nav>
+                <ul>
+                    <li><a href="#game-description">Game Description</a></li>
+                    <li><a href="#score-mechanics">Score Mechanics</a></li>
+                    <li><a href="#leaderboard">Leaderboard</a></li>
+                    <li><a href="#game-characters">Characters</a></li>
+                    <li><a href="{{ url_for('game') }}" class="play-button">Play Now</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Experience the Thrill of Bitcoin's Journey</h2>
+            <p>Navigate through the highs and lows of Bitcoin's price history in this exciting runner game.</p>
+            <a href="{{ url_for('game') }}" class="play-button">Play Now</a>
+        </div>
+    </section>
+
+    <section class="bitcoin-chart">
+        <div class="container">
+            <div class="chart-container">
+                <canvas id="price-chart"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section id="game-description" class="game-description">
+        <div class="container">
+            <h2>Game Description</h2>
+            <p>Bitcoin Price Runner is a thrilling game where you navigate a character through the historical price movements of Bitcoin. Survive drawdowns, collect bonuses, and experience the volatility of the Bitcoin market firsthand.</p>
+        </div>
+    </section>
+
+    <section id="score-mechanics" class="score-mechanics">
+        <div class="container">
+            <h2>Score Mechanics</h2>
+            <ul>
+                <li>Score increases with positive price movements, multiplied by your chosen speed in speed-slider. (leverage)</li>
+                <li>Each jump costs a penalty of $100.</li>
+                <li>Orange-pill (shoot) Altcoin distractors to gain points.</li>
+                <li>Orange-pill (shoot) Fiat maxis to gain even more points.</li>
+                <li>Navigate through the the events in Bitcoin's history to gain or loose points.</li>
+                <li>Jump over Drawdown-Bears to keep your journey going.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="leaderboard" class="leaderboard">
+        <div class="container">
+            <h2>Leaderboard</h2>
+            <div class="leaderboard-controls">
+                <select id="sort-select">
+                    <option value="score">Sort by Score</option>
+                    <option value="date">Sort by Date</option>
+                </select>
+                <div class="pagination">
+                    <button id="prev-page">Previous</button>
+                    <span id="page-info">Page 1 of 1</span>
+                    <button id="next-page">Next</button>
+                </div>
+            </div>
+            <table id="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Player</th>
+                        <th>Score</th>
+                        <th>HODL</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Leaderboard data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section id="game-characters" class="game-characters">
+        <div class="container">
+            <h2>Description of Game Characters</h2>
+            <div class="character-grid">
+                <div class="character-item">
+                    <img src="{{ url_for('static', filename='assets/images/large/player_large.png') }}" alt="Player">
+                    <h3>Player</h3>
+                    <p>Navigate through Bitcoin's price history events. Avoid bears and pill enemies.</p>
+                </div>
+                <div class="character-item">
+                    <img src="{{ url_for('static', filename='assets/images/large/obstacle_large.png') }}" alt="Obstacle">
+                    <h3>Drawdown-Bear</h3>
+                    <p>Represents market drawdowns. Jump over these to avoid losing lives.</p>
+                </div>
+                <div class="character-item">
+                    <img src="{{ url_for('static', filename='assets/images/large/enemy_2_large.png') }}" alt="Enemy 2">
+                    <h3>Fiat-Maxi</h3>
+                    <p>A tougher enemy. Defeat them for higher points and demonstrate Bitcoin's superiority.</p>
+                </div>
+                <div class="character-item">
+                    <img src="{{ url_for('static', filename='assets/images/large/enemy_1_large.png') }}" alt="Enemy 1">
+                    <h3>Altcoin-Distractor</h3>
+                    <p>Basic enemy. Defeat them to gain points and clear misconceptions about Bitcoin.</p>
+                </div>
+                <div class="character-item">
+                    <img src="{{ url_for('static', filename='assets/images/large/bullet_pill_large.png') }}" alt="Bullet Pill">
+                    <h3>Bitcoin Pill</h3>
+                    <p>Your weapon against enemies. Use it to orange-pill Altcoin and Fiat distractors.</p>
+                </div>
+                <div class="character-item">
+                    <img src="{{ url_for('static', filename='assets/images/large/bitcoin_event_positive_large.png') }}" alt="Positive Event">
+                    <h3>Positive Bitcoin Event</h3>
+                    <p>Represents positive news or developments. Collect these for score boosts.</p>
+                </div>
+                <div class="character-item">
+                    <img src="{{ url_for('static', filename='assets/images/large/bitcoin_event_negative_large.png') }}" alt="Negative Event">
+                    <h3>Negative Bitcoin Event</h3>
+                    <p>Represents negative news or FUD. Avoid these to prevent score penalties.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; {{ current_year }} Bitcoin Price Runner. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Include any required JavaScript libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include a script to render the Bitcoin price chart -->
+    <script src="{{ url_for('static', filename='js/price_chart.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/leaderboard.js') }}"></script>
+</body>
+</html>
