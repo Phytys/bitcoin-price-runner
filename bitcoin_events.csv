@@ -1,20 +1,26 @@
 date;event;impact
 2010-05-22;First Bitcoin transaction Bitcoin Pizza Day;300
 2011-02-09;Bitcoin reaches parity with the US dollar;500
-2012-11-28;Bitcoin Halving;1000
-2013-12-05;China Bans Bitcoin;-500
+2012-11-28;Bitcoin Halving 1;1000
+2013-11-30;Cycle high 2013;500
+2013-12-31;China Bans Bitcoin;-500
 2014-02-24;Mt. Gox Collapse;-1000
 2015-01-01;Blocksize Wars start;-1000
-2016-07-09;Bitcoin Halving;1000
+2015-01-14;Cycle low 2015;-1000
+2016-07-09;Bitcoin Halving 2;1000
 2017-09-04;China Bans ICOs;-1000
-2020-03-12;COVID-19 Crash;-1500
-2020-05-11;Bitcoin Halving;1500
+2017-12-17;Cycle high 2017;2000
+2018-12-15;Cycle low 2018;-2000
+2020-03-14;COVID-19 Crash;-1500
+2020-05-11;Bitcoin Halving 3;1500
 2020-08-11;Microstrategy buys Bitcoin;2000
 2021-02-08;Tesla announces $1.5 billion Bitcoin purchase;2000
 2021-05-12;Tesla Suspends Bitcoin Payments;-2000
 2021-09-07;El Salvador Adopts Bitcoin;3000
 2021-09-24;China Bans Bitcoin;-3000
-2022-11-11;FTX Collapse;-3000
+2021-11-09;Cycle high 2021;3000
+2022-11-01;FTX Collapse;-3000
+2022-11-21;Cycle low 2022;-3000
 2023-03-10;Silicon Valley Bank Collapse;-1000
 2024-01-10;Bitcoin ETFs approved;5000
-2024-04-19;Bitcoin Halving;5000
+2024-04-19;Bitcoin Halving 4;5000
