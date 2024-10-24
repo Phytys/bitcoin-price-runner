@@ -49,25 +49,13 @@ redis_url = app.config['REDIS_URL']
 if redis_url == 'local':
     redis_client = None
 else:
-    # Parse the Redis URL
-    parsed_url = urllib.parse.urlparse(redis_url)
-    
-    # Create a custom SSL context
-    ssl_context = ssl.create_default_context()
-    ssl_context.check_hostname = False
-    ssl_context.verify_mode = ssl.CERT_NONE
-
-    # Create Redis connection with SSL configuration
-    redis_client = redis.Redis(
-        host=parsed_url.hostname,
-        port=parsed_url.port,
-        password=parsed_url.password,
-        ssl=True,
-        ssl_cert_reqs='none',
-        connection_pool=redis.ConnectionPool(
-            ssl_context=ssl_context
-        )
-    )
+    try:
+        # Use from_url to handle the Redis connection
+        redis_client = redis.from_url(redis_url, ssl=True, ssl_cert_reqs='none')
+        logger.info("Connected to Redis successfully.")
+    except Exception as e:
+        logger.error(f"Error connecting to Redis: {e}")
+        redis_client = None
 
 if redis_client:
     limiter = Limiter(
