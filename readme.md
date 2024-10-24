@@ -1,5 +1,7 @@
 # Bitcoin Price Runner
 
+[www.bitcoinpricerunner.com](https://www.bitcoinpricerunner.com)
+
 Bitcoin Price Runner is an interactive web-based game that simulates the Bitcoin price journey. Players navigate through historical Bitcoin price movements, avoiding obstacles, collecting bonuses, and experiencing the volatility of the cryptocurrency market firsthand.
 
 ## Table of Contents
@@ -138,3 +140,5 @@ Example of adjusting scroll speed:
 10. **VR/AR Support**: Develop virtual or augmented reality versions of the game
 
 These enhancements would further improve the game's performance, engagement, and educational value in the cryptocurrency space.
+
+[www.bitcoinpricerunner.com](https://www.bitcoinpricerunner.com)
