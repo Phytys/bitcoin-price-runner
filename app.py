@@ -1,4 +1,4 @@
-# backend.py
+# app.py
 from flask import Flask, render_template, jsonify, make_response, send_from_directory, request
 from flask_caching import Cache
 from datetime import datetime, timedelta, timezone
@@ -13,6 +13,8 @@ from flask_limiter.util import get_remote_address
 import redis
 from config import config
 from flask_migrate import Migrate
+import urllib.parse
+import ssl
 
 load_dotenv()
 print(f"FLASK_DEBUG environment variable: '{os.environ.get('FLASK_DEBUG')}'")
@@ -47,7 +49,25 @@ redis_url = app.config['REDIS_URL']
 if redis_url == 'local':
     redis_client = None
 else:
-    redis_client = redis.from_url(redis_url)
+    # Parse the Redis URL
+    parsed_url = urllib.parse.urlparse(redis_url)
+    
+    # Create a custom SSL context
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+
+    # Create Redis connection with SSL configuration
+    redis_client = redis.Redis(
+        host=parsed_url.hostname,
+        port=parsed_url.port,
+        password=parsed_url.password,
+        ssl=True,
+        ssl_cert_reqs='none',
+        connection_pool=redis.ConnectionPool(
+            ssl_context=ssl_context
+        )
+    )
 
 if redis_client:
     limiter = Limiter(
