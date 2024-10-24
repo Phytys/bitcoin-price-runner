@@ -8,10 +8,11 @@ Bitcoin Price Runner is an interactive web-based game that simulates the Bitcoin
 2. [Backend](#backend)
 3. [Frontend](#frontend)
 4. [Game Mechanics](#game-mechanics)
-5. [Installation and Setup](#installation-and-setup)
-6. [Tuning Game Parameters](#tuning-game-parameters)
-7. [Contributing](#contributing)
-8. [License](#license)
+5. [Database](#database)
+6. [Redis Usage](#redis-usage)
+7. [Installation and Setup](#installation-and-setup)
+8. [Game Tuning Parameters](#game-tuning-parameters)
+9. [Future Optimizations and Enhancements](#future-optimizations-and-enhancements)
 
 ## Project Overview
 
@@ -21,7 +22,7 @@ Bitcoin Price Runner combines historical Bitcoin price data with interactive gam
 
 The backend is built using Flask and includes the following key components:
 
-- `backend.py`: Main Flask application
+- `app.py`: Main Flask application
 - `config.py`: Configuration settings for different environments
 - `utils.py`: Utility functions for data processing
 - `models.py`: Database models for the leaderboard
@@ -33,6 +34,15 @@ The backend is built using Flask and includes the following key components:
 3. **Caching**: Implements caching to improve performance
 4. **Database Integration**: Manages leaderboard entries
 5. **Error Handling**: Comprehensive error handling and logging
+
+### API Endpoints:
+
+- `/terrain_data`: Provides Bitcoin price data for game terrain
+- `/obstacles_data`: Supplies obstacle data for the game
+- `/bitcoin_events`: Delivers Bitcoin-related events data
+- `/enemies_data`: Provides enemy data for the game
+- `/leaderboard`: Retrieves leaderboard data
+- `/submit_score`: Endpoint for submitting player scores
 
 ## Frontend
 
@@ -63,6 +73,25 @@ The frontend consists of HTML templates and JavaScript files:
 5. **Enemies**: Altcoin distractors and Fiat maxis to be defeated
 6. **Scoring**: Based on price movements and player actions
 
+## Database
+
+The project uses SQLAlchemy as an ORM and supports both development and production environments:
+
+- **Development**: SQLite database
+- **Production**: PostgreSQL database
+
+The database stores leaderboard entries, including player names, scores, and timestamps.
+
+## Redis Usage
+
+Redis is utilized for:
+
+1. **Rate Limiting**: Implements distributed rate limiting for API endpoints
+2. **Caching**: Used as a caching backend in production for improved performance
+3. **Session Management**: Potential use for centralized session storage in a distributed environment
+
+The application checks for Redis availability and falls back to local alternatives when Redis is not available, providing flexibility for different deployment scenarios.
+
 ## Installation and Setup
 
 1. Clone the repository
@@ -79,10 +108,10 @@ The frontend consists of HTML templates and JavaScript files:
    ```
 5. Run the application:
    ```
-   python backend.py
+   python app.py
    ```
 
-## Tuning Game Parameters
+## Game Tuning Parameters
 
 Game parameters can be adjusted to modify difficulty and gameplay experience:
 
@@ -95,3 +124,17 @@ Game parameters can be adjusted to modify difficulty and gameplay experience:
 
 Example of adjusting scroll speed:
 
+## Future Optimizations and Enhancements
+
+1. **WebSocket Integration**: Implement real-time updates for leaderboard and multiplayer features
+2. **Asset Optimization**: Implement lazy loading and sprite atlases for improved performance
+3. **Mobile App Version**: Develop native mobile apps for iOS and Android
+4. **Machine Learning Integration**: Implement AI-driven enemies or dynamic difficulty adjustment
+5. **Blockchain Integration**: Add features to interact with actual Bitcoin transactions or Lightning Network
+6. **Expanded Events**: Include more historical and real-time Bitcoin events
+7. **Social Features**: Add sharing capabilities and friend challenges
+8. **Localization**: Implement multi-language support
+9. **Advanced Analytics**: Integrate detailed player statistics and gameplay analysis
+10. **VR/AR Support**: Develop virtual or augmented reality versions of the game
+
+These enhancements would further improve the game's performance, engagement, and educational value in the cryptocurrency space.
