@@ -50,13 +50,8 @@ if redis_url == 'local':
     redis_client = None
 else:
     try:
-        # Create a custom SSL context
-        ssl_context = ssl.create_default_context()
-        ssl_context.check_hostname = False
-        ssl_context.verify_mode = ssl.CERT_NONE
-
-        # Use from_url to handle the Redis connection with custom SSL context
-        redis_client = redis.from_url(redis_url, ssl=True, ssl_cert_reqs='none', ssl_context=ssl_context)
+        # Use from_url to handle the Redis connection with SSL options
+        redis_client = redis.from_url(redis_url, ssl=True, ssl_cert_reqs=None)
         logger.info("Connected to Redis successfully.")
     except Exception as e:
         logger.error(f"Error connecting to Redis: {e}")
@@ -68,7 +63,7 @@ if redis_client:
         app=app,
         key_func=get_remote_address,
         storage_uri=redis_url,
-        storage_options={'connection_class': redis.StrictRedis, 'ssl': True, 'ssl_cert_reqs': 'none', 'ssl_context': ssl_context}
+        storage_options={'connection_class': redis.StrictRedis, 'ssl': True, 'ssl_cert_reqs': None}
     )
 else:
     limiter = Limiter(
