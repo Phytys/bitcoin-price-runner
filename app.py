@@ -37,6 +37,10 @@ migrate = Migrate(app, db)
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+if not app.debug:
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.ERROR)
+    app.logger.addHandler(handler)
 
 # Modify the Redis setup
 redis_url = app.config['REDIS_URL']
@@ -49,8 +53,7 @@ if redis_client:
     limiter = Limiter(
         app=app,
         key_func=get_remote_address,
-        storage_uri=redis_url,
-        storage_options={"client": redis_client}
+        storage_uri=redis_url
     )
 else:
     limiter = Limiter(
@@ -209,25 +212,34 @@ def favicon():
 @app.route('/submit_score', methods=['POST'])
 @limiter.limit("5 per minute")
 def submit_score():
-    data = request.get_json()
-    player_name = data.get('player_name')
-    score = data.get('score')
-    hodl = data.get('hodl', False)
+    try:
+        data = request.get_json()
+        player_name = data.get('player_name')
+        score = data.get('score')
+        hodl = data.get('hodl', False)
 
-    if not player_name or not isinstance(player_name, str) or len(player_name) > 50:
-        return jsonify({'error': 'Invalid player name'}), 400
-    
-    if not isinstance(score, int) or score < 0:
-        return jsonify({'error': 'Invalid score'}), 400
+        # Validate player_name
+        if not player_name or not isinstance(player_name, str) or len(player_name) > 50:
+            return jsonify({'error': 'Invalid player name'}), 400
+        
+        # Validate score
+        if not isinstance(score, int) or score < 0:
+            return jsonify({'error': 'Invalid score'}), 400
 
-    if not isinstance(hodl, bool):
-        return jsonify({'error': 'Invalid hodl value'}), 400
+        # Validate hodl
+        if not isinstance(hodl, bool):
+            return jsonify({'error': 'Invalid hodl value'}), 400
 
-    new_entry = LeaderboardEntry(player_name=player_name, score=score, hodl=hodl)
-    db.session.add(new_entry)
-    db.session.commit()
+        # Create new leaderboard entry
+        new_entry = LeaderboardEntry(player_name=player_name, score=score, hodl=hodl)
+        db.session.add(new_entry)
+        db.session.commit()
 
-    return jsonify({'message': 'Score submitted successfully'}), 201
+        return jsonify({'message': 'Score submitted successfully'}), 201
+    except Exception as e:
+        app.logger.error(f"Error submitting score: {e}")
+        return jsonify({'error': 'Internal server error'}), 500
+
 
 # Route to get the leaderboard
 @app.route('/leaderboard')
