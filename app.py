@@ -52,7 +52,7 @@ if redis_url == 'local':
 else:
     try:
         # Create a connection pool with SSL options
-        pool = ConnectionPool.from_url(redis_url, ssl=True, ssl_cert_reqs=None)
+        pool = ConnectionPool.from_url(redis_url, ssl_cert_reqs=None)
         redis_client = redis.StrictRedis(connection_pool=pool)
         logger.info("Connected to Redis successfully.")
     except Exception as e:
