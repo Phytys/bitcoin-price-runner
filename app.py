@@ -15,6 +15,7 @@ from config import config
 from flask_migrate import Migrate
 import urllib.parse
 import ssl
+from redis import ConnectionPool
 
 load_dotenv()
 print(f"FLASK_DEBUG environment variable: '{os.environ.get('FLASK_DEBUG')}'")
@@ -50,8 +51,9 @@ if redis_url == 'local':
     redis_client = None
 else:
     try:
-        # Use from_url to handle the Redis connection with SSL options
-        redis_client = redis.from_url(redis_url, ssl=True, ssl_cert_reqs=None)
+        # Create a connection pool with SSL options
+        pool = ConnectionPool.from_url(redis_url, ssl=True, ssl_cert_reqs=None)
+        redis_client = redis.StrictRedis(connection_pool=pool)
         logger.info("Connected to Redis successfully.")
     except Exception as e:
         logger.error(f"Error connecting to Redis: {e}")
@@ -63,7 +65,7 @@ if redis_client:
         app=app,
         key_func=get_remote_address,
         storage_uri=redis_url,
-        storage_options={'connection_class': redis.StrictRedis, 'ssl': True, 'ssl_cert_reqs': None}
+        storage_options={'connection_pool': pool}
     )
 else:
     limiter = Limiter(
