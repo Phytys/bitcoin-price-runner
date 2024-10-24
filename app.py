@@ -62,11 +62,13 @@ else:
         logger.error(f"Error connecting to Redis: {e}")
         redis_client = None
 
+# Ensure the limiter uses the same Redis client
 if redis_client:
     limiter = Limiter(
         app=app,
         key_func=get_remote_address,
-        storage_uri=redis_url
+        storage_uri=redis_url,
+        storage_options={'connection_class': redis.StrictRedis, 'ssl': True, 'ssl_cert_reqs': 'none', 'ssl_context': ssl_context}
     )
 else:
     limiter = Limiter(
