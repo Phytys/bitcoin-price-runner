@@ -35,8 +35,14 @@
         <!-- Updated Shoot Button: Removed emoji -->
         <button id="shoot-button" aria-label="Shoot"></button>
         <div id="speed-control">
-            <input type="range" id="speed-slider" min="0.5" max="3" step="0.1" value="1.0" aria-label="Scroll Speed Slider">
-            <span id="speed-value">1.0x</span>
+            <label for="speed-slider">Speed:</label>
+            <input type="range" 
+                   id="speed-slider" 
+                   min="0.5" 
+                   max="3" 
+                   step="0.01" 
+                   value="1.0">
+            <span id="speed-value">1.0×</span>
         </div>
         <!-- Updated Jump Button: Changed content to "JUMP" -->
         <button id="jump-button" aria-label="Jump">JUMP</button>

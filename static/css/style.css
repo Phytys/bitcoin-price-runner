@@ -181,23 +181,44 @@ select, input[type="text"] {
   transition: opacity var(--transition-speed);
 }
 
-#speed-control input[type=range]::-webkit-slider-thumb,
-#speed-control input[type=range]::-moz-range-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 24px;
-  height: 24px;
-  background: var(--secondary-color);
-  cursor: pointer;
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--secondary-color);
-  transition: background var(--transition-speed), box-shadow var(--transition-speed);
+#speed-control input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 24px;  /* Increased size */
+    width: 24px;   /* Increased size */
+    border-radius: 50%;
+    background: var(--primary-color);  /* Using cyberpunk cyan */
+    box-shadow: 0 0 15px var(--primary-color), /* Outer glow */
+                inset 0 0 8px rgba(255, 255, 255, 0.8); /* Inner glow */
+    border: 2px solid rgba(0, 255, 255, 0.8);
+    cursor: pointer;
+    margin-top: -8px; /* Centers the thumb on the track */
 }
 
-#speed-control input[type=range]::-webkit-slider-thumb:hover,
-#speed-control input[type=range]::-moz-range-thumb:hover {
-  background: var(--primary-color);
-  box-shadow: 0 0 20px var(--primary-color);
+/* For Firefox */
+#speed-control input[type=range]::-moz-range-thumb {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    box-shadow: 0 0 15px var(--primary-color),
+                inset 0 0 8px rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(0, 255, 255, 0.8);
+    cursor: pointer;
+}
+
+/* Optional: Style the track (the line the thumb moves along) */
+#speed-control input[type=range]::-webkit-slider-runnable-track {
+    height: 8px;
+    background: rgba(0, 255, 255, 0.2);
+    border-radius: 4px;
+    border: 1px solid rgba(0, 255, 255, 0.4);
+}
+
+#speed-control input[type=range]::-moz-range-track {
+    height: 8px;
+    background: rgba(0, 255, 255, 0.2);
+    border-radius: 4px;
+    border: 1px solid rgba(0, 255, 255, 0.4);
 }
 
 /* Footer Styles */
@@ -336,6 +357,7 @@ select, input[type="text"] {
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    gap: 8px; /* Added for better spacing */
 }
 
 #speed-control input[type=range] {
@@ -343,24 +365,33 @@ select, input[type="text"] {
     margin-right: 10px;
     -webkit-appearance: none;
     background: transparent;
+    cursor: pointer; /* Added to show it's interactive */
 }
 
-#speed-control input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: var(--primary-color);
-    cursor: pointer;
-    border-radius: 50%;
-}
-
+#speed-control input[type=range]::-webkit-slider-thumb,
 #speed-control input[type=range]::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: var(--primary-color);
-    cursor: pointer;
-    border-radius: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: var(--secondary-color);
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--secondary-color);
+  transition: background var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+#speed-control input[type=range]::-webkit-slider-thumb:hover,
+#speed-control input[type=range]::-moz-range-thumb:hover {
+  background: var(--primary-color);
+  box-shadow: 0 0 20px var(--primary-color);
+}
+
+#speed-control label {
+    color: var(--text-color);
+    margin-right: 10px;
+    font-weight: bold;
+    white-space: nowrap; /* Added to prevent wrapping */
 }
 
 #speed-value {
@@ -609,6 +640,7 @@ select, input[type="text"] {
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+    gap: 8px; /* Added for better spacing */
 }
 
 #speed-control input[type=range] {
@@ -616,24 +648,33 @@ select, input[type="text"] {
     margin-right: 10px;
     -webkit-appearance: none;
     background: transparent;
+    cursor: pointer; /* Added to show it's interactive */
 }
 
-#speed-control input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 25px;
-    height: 25px;
-    background: var(--primary-color);
-    cursor: pointer;
-    border-radius: 50%;
-}
-
+#speed-control input[type=range]::-webkit-slider-thumb,
 #speed-control input[type=range]::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: var(--primary-color);
-    cursor: pointer;
-    border-radius: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  background: var(--secondary-color);
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--secondary-color);
+  transition: background var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+#speed-control input[type=range]::-webkit-slider-thumb:hover,
+#speed-control input[type=range]::-moz-range-thumb:hover {
+  background: var(--primary-color);
+  box-shadow: 0 0 20px var(--primary-color);
+}
+
+#speed-control label {
+    color: var(--text-color);
+    margin-right: 10px;
+    font-weight: bold;
+    white-space: nowrap; /* Added to prevent wrapping */
 }
 
 #speed-value {
@@ -644,8 +685,3 @@ select, input[type="text"] {
     font-weight: bold;
 }
 
-#speed-control label {
-    color: var(--text-color);
-    margin-right: 10px;
-    font-weight: bold;
-}
