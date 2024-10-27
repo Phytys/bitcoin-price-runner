@@ -26,7 +26,7 @@ export default class GameScene extends Phaser.Scene {
         this.backgroundManager = null;
         this.physicsManager = null;
         this.terrainOffset = 0;
-        this.baseScrollSpeed = 0.3;
+        this.baseScrollSpeed = 18; // Increased from 0.3 to 18
         this.scrollSpeed = this.baseScrollSpeed * 1.0;
         this.gameOver = false;
         this.gameCompleted = false; // New flag to indicate game completion
@@ -61,6 +61,7 @@ export default class GameScene extends Phaser.Scene {
             enemy: 700,
             enemy_2: 2500
         };
+        this.lastUpdateTime = 0;
     }
 
     preload() {
@@ -245,18 +246,21 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
-    update() {
+    update(time, delta) {
         try {
             if (
                 this.isGameRunning &&
                 this.dataManager.terrainData &&
                 this.dataManager.terrainData.length > 0 &&
                 !this.gameOver &&
-                !this.gameCompleted && // Ensure game is not already completed
+                !this.gameCompleted &&
                 this.terrain
             ) {
+                // Calculate time-based movement
+                const deltaSeconds = delta / 1000;
+
                 // Increment terrain offset to scroll the terrain
-                this.terrainOffset += this.scrollSpeed;
+                this.terrainOffset += this.scrollSpeed * deltaSeconds;
 
                 // Ensure terrainOffset doesn't exceed data length
                 this.terrainOffset = Math.min(
@@ -319,7 +323,7 @@ export default class GameScene extends Phaser.Scene {
 
                 // Update bullets
                 if (this.bullets) {
-                    this.bullets.update();
+                    this.bullets.update(deltaSeconds);
 
                     // Manually check for bullet-enemy collisions
                     for (let bulletIndex = this.bullets.bullets.length - 1; bulletIndex >= 0; bulletIndex--) {
@@ -333,7 +337,6 @@ export default class GameScene extends Phaser.Scene {
                             }
                         }
                     }
-
                     // Check for bullet-enemy2 collisions
                     if (this.enemies2 && this.enemies2.enemies.length > 0) {
                         for (let bulletIndex = this.bullets.bullets.length - 1; bulletIndex >= 0; bulletIndex--) {
@@ -351,7 +354,7 @@ export default class GameScene extends Phaser.Scene {
                 }
 
                 // Update input handler (e.g., for shooting)
-                this.inputHandler.update();
+                this.inputHandler.update(deltaSeconds);
 
                 // Update player and UI elements
                 const playerIndex = Math.min(
@@ -361,7 +364,7 @@ export default class GameScene extends Phaser.Scene {
                 const data = this.dataManager.terrainData[playerIndex];
                 if (data) {
                     const terrainY = this.terrain.calculateTerrainY(data, this.terrainOffset);
-                    this.player.update(terrainY);
+                    this.player.update(terrainY, deltaSeconds);
                     this.updateScore(data);
 
                     // Update date and price text
@@ -376,16 +379,16 @@ export default class GameScene extends Phaser.Scene {
                     // Update speed effect text
                     this.uiManager.updateSpeedEffectText(this.userSpeed);
                 }
-            }
 
-            // Apply scaling in the update loop if necessary
-            if (this.player) {
-                this.player.updateScale(this.spriteScale);
-            }
+                // Apply scaling in the update loop if necessary
+                if (this.player) {
+                    this.player.updateScale(this.spriteScale);
+                }
 
-            // Update Enemies2
-            if (this.enemies2) {
-                this.enemies2.update();
+                // Update Enemies2
+                if (this.enemies2) {
+                    this.enemies2.update(deltaSeconds);
+                }
             }
         } catch (error) {
             console.error('Unexpected error in update:', error);
@@ -972,5 +975,11 @@ Enemies Hit: ${enemiesHitCount}`;
                 }
             });
         }
+    }
+
+    setScrollSpeed(speed) {
+        this.userSpeed = speed;
+        this.scrollSpeed = this.baseScrollSpeed * this.userSpeed;
+        console.log(`Scroll speed set to: ${this.scrollSpeed} (base: ${this.baseScrollSpeed}, user: ${this.userSpeed})`);
     }
 }
