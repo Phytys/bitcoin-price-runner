@@ -27,29 +27,29 @@ export default class InputHandler {
     }
 
     initializePointerInput() {
-        // Handle shooting when the shoot button is clicked or tapped
-        const shootButton = document.getElementById('shoot-button');
-        if (shootButton) {
-            shootButton.addEventListener('touchstart', (event) => {
-                event.preventDefault(); // Prevents the default behavior
-                this.handleShoot();
+        const addButtonFeedback = (button) => {
+            button.addEventListener('touchstart', () => {
+                button.style.transform = 'scale(0.92)';
             });
+            button.addEventListener('touchend', () => {
+                button.style.transform = 'scale(1)';
+            });
+        };
 
-            shootButton.addEventListener('click', (event) => {
+        const shootButton = document.getElementById('shoot-button');
+        const jumpButton = document.getElementById('jump-button');
+
+        if (shootButton) {
+            addButtonFeedback(shootButton);
+            shootButton.addEventListener('touchstart', (event) => {
                 event.preventDefault();
                 this.handleShoot();
             });
         }
 
-        // Handle jumping when the jump button is clicked or tapped
-        const jumpButton = document.getElementById('jump-button');
         if (jumpButton) {
+            addButtonFeedback(jumpButton);
             jumpButton.addEventListener('touchstart', (event) => {
-                event.preventDefault();
-                this.handleJump();
-            });
-
-            jumpButton.addEventListener('click', (event) => {
                 event.preventDefault();
                 this.handleJump();
             });
