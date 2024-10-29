@@ -1,50 +1,51 @@
 // static/js/main.js
 
 import GameScene from './game/scenes/GameScene.js';
-
-const config = {
-    type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight,
-    parent: 'game-container',
-    scene: [GameScene],
-    scale: {
-        mode: Phaser.Scale.RESIZE, // Automatically resize the game canvas
-        autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game canvas
-    },
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 300 },
-            debug: false,
-        },
-    },
-};
+import { phaserConfig } from './game/config.js';
 
 let game;
 
-try {
-    game = new Phaser.Game(config);
-    window.game = game; // Expose game variable to global scope
-} catch (error) {
-    console.error('Error initializing game:', error);
-    showErrorMessage('Failed to initialize the game. Please refresh the page or try again later.');
-}
+const initializeGame = () => {
+    const warningDiv = document.getElementById('orientation-warning');
+    const gameControls = document.getElementById('game-controls');
+    const topControls = document.getElementById('top-controls');
+    if (!warningDiv || !gameControls || !topControls) return;
 
-window.onerror = function(message, source, lineno, colno, error) {
-    console.error('Global error:', message, 'at', source, lineno, colno);
-    console.error('Error object:', error);
-    showErrorMessage('An unexpected error occurred. The game will attempt to restart.');
+    const isLandscape = window.innerWidth > window.innerHeight;
+    warningDiv.style.display = isLandscape ? 'none' : 'flex';
+    gameControls.style.display = isLandscape ? 'flex' : 'none';
+    topControls.style.display = isLandscape ? 'flex' : 'none';
 
-    if (game && game.scene) {
-        const currentScene = game.scene.getScene('GameScene');
-        if (currentScene) {
-            currentScene.handleError(error);
-        } else {
-            game.scene.add('GameScene', GameScene, true);
+    if (!isLandscape) {
+        if (game) {
+            game.destroy(true);
+            game = null;
         }
+        return;
     }
 
+    try {
+        if (game) {
+            game.destroy(true);
+            game = null;
+        }
+        
+        phaserConfig.width = window.innerWidth;
+        phaserConfig.height = window.innerHeight;
+        phaserConfig.scene = GameScene;
+        
+        game = new Phaser.Game(phaserConfig);
+        window.game = game;
+    } catch (error) {
+        handleError(error, 'Failed to initialize the game. Please refresh the page.');
+    }
+};
+
+window.addEventListener('resize', initializeGame);
+initializeGame();
+
+window.onerror = function(message, source, lineno, colno, error) {
+    handleError(error);
     return true;
 };
 
@@ -62,51 +63,7 @@ function showErrorMessage(message) {
     errorDiv.textContent = message;
 
     document.body.appendChild(errorDiv);
-
-    setTimeout(() => {
-        errorDiv.remove();
-    }, 5000);
+    setTimeout(() => errorDiv.remove(), 5000);
 }
 
 console.log('Main script loaded successfully');
-
-// Orientation detection code
-function checkOrientation() {
-    if (window.innerHeight > window.innerWidth) {
-        // Portrait mode
-        const warningDiv = document.getElementById('orientation-warning');
-        if (warningDiv) {
-            warningDiv.style.display = 'flex';
-        }
-        // Optionally, pause the game if it's running
-        if (game && game.scene) {
-            const currentScene = game.scene.getScene('GameScene');
-            if (currentScene && !currentScene.scene.isPaused()) {
-                currentScene.scene.pause();
-            }
-        }
-    } else {
-        // Landscape mode
-        const warningDiv = document.getElementById('orientation-warning');
-        if (warningDiv) {
-            warningDiv.style.display = 'none';
-        }
-        // Optionally, resume the game if it was paused
-        if (game && game.scene) {
-            const currentScene = game.scene.getScene('GameScene');
-            if (currentScene && currentScene.scene.isPaused()) {
-                currentScene.scene.resume();
-            }
-        }
-    }
-}
-
-// Ensure the DOM is loaded before accessing elements
-window.addEventListener('load', function() {
-    // Add event listeners for orientation changes
-    window.addEventListener('resize', checkOrientation);
-    window.addEventListener('orientationchange', checkOrientation);
-
-    // Perform the initial check
-    checkOrientation();
-});

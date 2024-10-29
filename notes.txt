@@ -1,12 +1,17 @@
-Just some notes here..
---------------------------------
-FLASK_APP Environment Variable Set:
-Flask needs to know which file contains your application instance.
+Scale, resize and orientation optimization.
 
-Temporary Setting (for current session):
-# For PowerShell on Windows
-$Env:FLASK_APP = "app.py"
+Proposed Implementation Plan:
+Phase 1: Configuration Centralization
+Create a single source of truth for game configuration
+Implement proper scale manager settings
+Set up orientation lock for mobile devices
 
-Permanent Setting:
-You can add the above line to your virtual environment's activation script 
-(Activate.ps1) to set it automatically each time you activate the environment.
+Phase 2: Scene Management
+Implement proper scene state management
+Remove redundant resize calculations
+Optimize scene transitions
+
+Phase 3: UI Optimization
+Implement responsive UI layout system
+Optimize mobile controls
+Enhance orientation warning system

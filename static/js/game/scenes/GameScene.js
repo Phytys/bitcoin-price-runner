@@ -17,7 +17,17 @@ import Enemies2 from '../entities/Enemies2.js';
 export default class GameScene extends Phaser.Scene {
     constructor() {
         super('GameScene');
-        // Initialize properties
+        
+        // Initialize properties using gameConfig
+        this.REFERENCE_WIDTH = gameConfig.referenceWidth;
+        this.REFERENCE_HEIGHT = gameConfig.referenceHeight;
+        this.tuningParameter = gameConfig.tuningParameter;
+        this.baseScrollSpeed = gameConfig.baseScrollSpeed;
+        this.jumpPenalty = gameConfig.jumpPenalty;
+        this.initialLives = gameConfig.initialLives;
+        this.enemyPoints = gameConfig.enemyPoints;
+        
+        // Initialize other properties
         this.terrain = null;
         this.obstacles = null;
         this.gameEvents = null;
@@ -26,10 +36,9 @@ export default class GameScene extends Phaser.Scene {
         this.backgroundManager = null;
         this.physicsManager = null;
         this.terrainOffset = 0;
-        this.baseScrollSpeed = 18; // Increased from 0.3 to 18
         this.scrollSpeed = this.baseScrollSpeed * 1.0;
         this.gameOver = false;
-        this.gameCompleted = false; // New flag to indicate game completion
+        this.gameCompleted = false;
         this.visibleDataPoints = 60;
         this.isGameRunning = false;
         this.player = null;
@@ -37,7 +46,6 @@ export default class GameScene extends Phaser.Scene {
         this.lastPrice = 0;
         this.jumpCount = 0;
         this.enemiesHitCount = 0;
-        this.jumpPenalty = 100;
         this.obstacleHeightOffsetFactor = -0.03;
         this.eventHeightOffsetFactor = 0.15;
         this.enemyHeightOffsetFactor = -0.02;
@@ -47,21 +55,10 @@ export default class GameScene extends Phaser.Scene {
         this.obstacleSpritesGroup = null;
         this.eventSpritesGroup = null;
         this.enemySpritesGroup = null;
-
-        // Add scaling properties
-        this.REFERENCE_WIDTH = 1280; // Original design width
-        this.REFERENCE_HEIGHT = 720;  // Original design height
-        this.tuningParameter = 1.3; // Adjust this to fine-tune scaling
-        this.spriteScale = 1.0; // Will be calculated based on screen size
+        this.spriteScale = 1.0;
+        this.lastUpdateTime = 0;
 
         console.log('GameScene constructor called');
-
-        this.initialLives = 3; // Configurable number of lives
-        this.enemyPoints = {
-            enemy: 700,
-            enemy_2: 2500
-        };
-        this.lastUpdateTime = 0;
     }
 
     preload() {
@@ -204,45 +201,42 @@ export default class GameScene extends Phaser.Scene {
     resize() {
         const width = this.scale.width;
         const height = this.scale.height;
-    
+
+        // Update camera and recalculate scale
         this.cameras.main.setViewport(0, 0, width, height);
-    
-        // Recalculate scaling
         this.calculateScale();
-    
-        // Adjust background via BackgroundManager
+
+        // Update background first
         if (this.backgroundManager) {
             this.backgroundManager.resize();
         }
-    
-        // Adjust UI elements via UIManager
+
+        // Update UI elements
         if (this.uiManager) {
             this.uiManager.resizeUI();
         }
-    
-        // Redraw terrain if it exists
-        if (this.terrain) {
-            this.terrain.draw(this.terrainOffset);
-        }
-    
+
+        // Calculate new positions based on screen size
+        const centerX = width / 2;
+        const groundY = height - (100 * this.spriteScale);
+
         // Update player position and scale
         if (this.player) {
-            this.player.setPosition(width / 2, height - 100);
-            this.player.setScale(this.spriteScale);
+            this.player.sprite.setScale(this.spriteScale);
+            this.player.setPosition(centerX, groundY);
         }
-    
-        // Update scaling for other entities
-        if (this.obstacles) {
-            this.obstacles.updateScale(this.spriteScale);
-        }
-        if (this.gameEvents) {
-            this.gameEvents.updateScale(this.spriteScale);
-        }
-        if (this.enemies) {
-            this.enemies.updateScale(this.spriteScale);
-        }
-        if (this.bullets) {
-            this.bullets.updateScale(this.spriteScale);
+
+        // Update all game entities with new scale and positions
+        [this.obstacles, this.gameEvents, this.enemies, this.bullets, this.enemies2].forEach(entity => {
+            if (entity && typeof entity.updateScale === 'function') {
+                entity.updateScale(this.spriteScale);
+            }
+        });
+
+        // Redraw terrain with new scale
+        if (this.terrain) {
+            this.terrain.updateScale(this.spriteScale);
+            this.terrain.draw(this.terrainOffset);
         }
     }
 
@@ -981,5 +975,64 @@ Enemies Hit: ${enemiesHitCount}`;
         this.userSpeed = speed;
         this.scrollSpeed = this.baseScrollSpeed * this.userSpeed;
         console.log(`Scroll speed set to: ${this.scrollSpeed} (base: ${this.baseScrollSpeed}, user: ${this.userSpeed})`);
+    }
+
+    pauseScene() {
+        if (!this.isGameRunning) return;
+        
+        this.scene.pause();
+        this.input.keyboard.enabled = false;
+        this.physics.pause();
+        
+        // Use the same entity array as clear() method
+        [this.terrain, this.obstacles, this.gameEvents, this.enemies, this.bullets, this.enemies2].forEach(entity => {
+            if (entity && typeof entity.pause === 'function') {
+                entity.pause();
+            }
+        });
+        
+        if (this.player && this.player.sprite) {
+            this.player.sprite.setVelocity(0, 0);
+        }
+        
+        // Pause all active particle systems
+        if (this.game.particles) {
+            this.game.particles.pauseAll();
+        }
+    }
+
+    resumeScene() {
+        if (this.gameOver || this.gameCompleted) return;
+        
+        this.scene.resume();
+        this.input.keyboard.enabled = true;
+        this.physics.resume();
+        
+        // Resume all active entities
+        [this.terrain, this.obstacles, this.gameEvents, this.enemies, this.bullets, this.enemies2].forEach(entity => {
+            if (entity && typeof entity.resume === 'function') {
+                entity.resume();
+            }
+        });
+        
+        // Resume all particle systems
+        if (this.game.particles) {
+            this.game.particles.resumeAll();
+        }
+        
+        // Initialize backgroundManager if needed
+        if (!this.backgroundManager) {
+            this.backgroundManager = new BackgroundManager(this);
+        }
+        
+        // Ensure graphics are properly restored
+        this.recreateGraphics();
+        this.scale.refresh();
+    }
+
+    restartScene() {
+        this.clear();
+        this.recreateGraphics();
+        this.scene.restart();
     }
 }
