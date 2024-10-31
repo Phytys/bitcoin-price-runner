@@ -612,7 +612,6 @@ export default class GameScene extends Phaser.Scene {
                 speedAdjustedPenalty,
                 this.scoreMultiplier
             );
-            console.log(`Player jumped. Total jumps: ${this.jumpCount}, Penalty: ${speedAdjustedPenalty}`);
         }
     }
 
@@ -629,15 +628,6 @@ export default class GameScene extends Phaser.Scene {
                 const priceDifference = currentPrice - this.lastPrice;
                 const adjustedDifference = priceDifference * this.userSpeed;
                 this.score += adjustedDifference;
-                
-                console.log('Score update:', {
-                    currentPrice,
-                    lastPrice: this.lastPrice,
-                    speedMultiplier: this.userSpeed,
-                    priceDifference,
-                    adjustedDifference
-                });
-                
                 this.lastPrice = currentPrice;
             }
 
@@ -744,7 +734,7 @@ Enemies Hit: ${enemiesHitCount}`;
     }
 
     handleObstacleCollision(playerSprite, obstacleSprite) {
-        console.log('Player collided with obstacle!');
+        // console.log('Player collided with obstacle!');
         this.sound.play('obstacle_impact');  // Add this line to play the sound
         const remainingLives = this.player.loseLife();
         this.player.flash(); // Trigger the enhanced flash effect
@@ -761,7 +751,6 @@ Enemies Hit: ${enemiesHitCount}`;
     handleEventOverlap(playerSprite, eventSprite) {
         const eventData = eventSprite.eventData;
         if (eventData && !eventSprite.collected) {
-            console.log('Player passed an event:', eventData.event);
             // Update score based on event's impact
             this.score += eventData.impact;
             this.uiManager.updateScoreText(this.score);
@@ -788,7 +777,6 @@ Enemies Hit: ${enemiesHitCount}`;
     }
 
     handleBulletEnemyCollision(bulletSprite, enemySprite) {
-        console.log('Bullet hit an enemy!');
         // Destroy both the bullet and the enemy
         bulletSprite.destroy();
         enemySprite.destroy();
