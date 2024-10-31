@@ -77,7 +77,7 @@
                     <li><a href="#leaderboard">Leaderboard</a></li>
                     <li><a href="#game-characters">Characters</a></li>
                     <li><a href="#game-controls-info">Game Controls</a></li>
-                    <li><a href="{{ url_for('game') }}" class="play-button">Play Now</a></li>
+                    <li><a href="#donations" class="highlight-link">⚡ Donate</a></li>
                 </ul>
             </nav>
         </div>
@@ -256,6 +256,19 @@
                     <h3>Negative Bitcoin Event</h3>
                     <p>Represents negative news or FUD. Avoid these to prevent score penalties.</p>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="donations" class="donations">
+        <div class="container">
+            <h2>Donations via Lightning</h2>
+            <div class="donation-container">
+                <img src="{{ url_for('static', filename='assets/images/large/lightning_qr.png') }}" 
+                     alt="Lightning Network QR Code for donations" 
+                     class="lightning-qr"
+                     loading="lazy">
+                <p>Support Bitcoin Price Runner's development by sending sats via Lightning Network!</p>
             </div>
         </div>
     </section>
