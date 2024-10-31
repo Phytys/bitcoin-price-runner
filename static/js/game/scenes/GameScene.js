@@ -621,14 +621,23 @@ export default class GameScene extends Phaser.Scene {
 
         try {
             const currentPrice = data.ma_7;
-
             if (this.lastPrice === 0) {
                 this.score = currentPrice;
                 this.lastPrice = currentPrice;
                 console.log(`Initial score set to: ${this.score}`);
             } else {
                 const priceDifference = currentPrice - this.lastPrice;
-                this.score += priceDifference * this.scoreMultiplier;
+                const adjustedDifference = priceDifference * this.userSpeed;
+                this.score += adjustedDifference;
+                
+                console.log('Score update:', {
+                    currentPrice,
+                    lastPrice: this.lastPrice,
+                    speedMultiplier: this.userSpeed,
+                    priceDifference,
+                    adjustedDifference
+                });
+                
                 this.lastPrice = currentPrice;
             }
 
