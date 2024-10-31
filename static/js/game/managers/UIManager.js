@@ -25,9 +25,9 @@ export default class UIManager {
             "Welcome to Bitcoin Price Runner!",
             "",
             "Instructions:",
-            "1. Avoid bears by jumping.",
-            "2. Pass events to gain or lose points.",
-            "3. Orange pill the dark fiat bros to gain points.",
+            "1. Avoid bears by jumping (multi-jumps to fly).",
+            "2. Navigate through bitcoin events to gain or lose points.",
+            "3. Orange pill altcoin-distractors and fiat-maxis to gain points.",
             "4. HODL",
             "",
             "Click to start!"

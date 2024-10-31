@@ -33,7 +33,7 @@ export const gameConfig = {
     
     // Game settings
     baseScrollSpeed: 23,
-    jumpPenalty: 100,
+    jumpPenalty: 150,
     initialLives: 3,
     
     // UI settings
