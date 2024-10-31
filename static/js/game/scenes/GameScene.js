@@ -666,7 +666,7 @@ Enemies Hit: ${enemiesHitCount}`;
             this.uiManager.showCompletionMessage(completionText);
             console.log('Game completed successfully');
 
-            this.showNameInputModal("Congratulations!", finalScore, true);
+            this.showNameInputModal("Congratulations HODLer!", finalScore, true);
         } catch (error) {
             console.error('Error in showGameCompleted:', error);
         }
@@ -678,14 +678,40 @@ Enemies Hit: ${enemiesHitCount}`;
         const submitButton = document.getElementById('submit-score-button');
         const cancelButton = document.getElementById('cancel-score-button');
         const playerNameInput = document.getElementById('player-name-input');
+        const modalContent = document.getElementById('modal-content');
+
+        // Get current BTC price
+        const currentPrice = this.lastPrice;
+
+        // Update modal content with score and price information
+        modalContent.innerHTML = `
+            <div class="score-details">
+                <p class="score-value">Score: $${score.toFixed(2)}</p>
+                <p class="btc-price">BTC Price: $${currentPrice.toFixed(2)}</p>
+            </div>
+            <div class="input-container">
+                <input type="text" 
+                       id="player-name-input" 
+                       placeholder="Enter your name" 
+                       maxlength="50"
+                       class="name-input">
+            </div>
+        `;
 
         modalTitle.textContent = title;
         modal.style.display = 'block';
 
+        // Focus on input after modal is shown
+        setTimeout(() => {
+            const newInput = document.getElementById('player-name-input');
+            if (newInput) newInput.focus();
+        }, 100);
+
         submitButton.onclick = () => {
-            const playerName = playerNameInput.value.trim();
+            const newInput = document.getElementById('player-name-input');
+            const playerName = newInput.value.trim();
             if (playerName) {
-                this.submitScore(playerName, score, hodl);
+                this.submitScore(playerName, score, hodl, currentPrice);
                 modal.style.display = 'none';
             }
         };
@@ -694,7 +720,8 @@ Enemies Hit: ${enemiesHitCount}`;
             modal.style.display = 'none';
         };
 
-        playerNameInput.onkeyup = (event) => {
+        // Handle Enter key
+        modal.onkeyup = (event) => {
             if (event.key === 'Enter') {
                 submitButton.click();
             }
@@ -876,10 +903,11 @@ Enemies Hit: ${enemiesHitCount}`;
         }, 1000);
     }
 
-    submitScore(playerName, score, hodl) {
+    submitScore(playerName, score, hodl, btcPrice) {
         if (typeof playerName !== 'string' || playerName.length > 50 || 
             typeof score !== 'number' || 
-            typeof hodl !== 'boolean') {
+            typeof hodl !== 'boolean' ||
+            typeof btcPrice !== 'number') {
             console.error('Invalid score submission data');
             return;
         }
@@ -894,7 +922,8 @@ Enemies Hit: ${enemiesHitCount}`;
             body: JSON.stringify({
                 player_name: playerName,
                 score: Math.round(score),
-                hodl: hodl
+                hodl: hodl,
+                btc_price: btcPrice
             }),
         })
         .then(response => {
@@ -905,7 +934,6 @@ Enemies Hit: ${enemiesHitCount}`;
         })
         .then(data => {
             console.log('Score submitted successfully:', data);
-            // Optionally, you can update the leaderboard here
         })
         .catch((error) => {
             console.error('Error:', error);
