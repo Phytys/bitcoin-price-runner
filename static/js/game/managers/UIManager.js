@@ -241,7 +241,7 @@ Score changes are multiplied by this factor.`;
             y,
             `${impact > 0 ? '+' : ''}${impact}`,
             {
-                fontSize: '20px',
+                fontSize: '25px',
                 fill: impact > 0 ? '#00FF00' : '#FF0000', // Green for positive, Red for negative
                 fontFamily: 'Roboto, sans-serif',
                 align: 'center'

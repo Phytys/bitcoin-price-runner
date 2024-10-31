@@ -32,7 +32,7 @@ export const gameConfig = {
     tuningParameter: 1.3,
     
     // Game settings
-    baseScrollSpeed: 18,
+    baseScrollSpeed: 23,
     jumpPenalty: 100,
     initialLives: 3,
     
@@ -43,7 +43,7 @@ export const gameConfig = {
     // Scoring
     enemyPoints: {
         enemy: 700,
-        enemy_2: 2500
+        enemy_2: 1000
     }
 };
 

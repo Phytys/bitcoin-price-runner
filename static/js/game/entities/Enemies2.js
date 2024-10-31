@@ -29,7 +29,12 @@ export default class Enemies2 {
         const y = -50; // Start above the screen
         const enemy = this.scene.physics.add.sprite(x, y, 'enemy_2');
         enemy.setScale(this.scene.spriteScale);
-        enemy.setVelocityY(5); // Slower vertical speed
+        
+        // Disable gravity for this sprite
+        enemy.body.setAllowGravity(false);
+    
+        enemy.setVelocityY(200); // Adjust this value to control drop speed
+        
         this.scene.physics.add.existing(enemy); // Add to physics system
         this.enemies.push(enemy);
     }

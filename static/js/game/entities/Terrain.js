@@ -165,7 +165,7 @@ export default class Terrain {
         if (!this.dateTextsInitialized) {
             for (let i = 0; i <= 5; i++) {
                 const text = this.scene.add.text(0, 0, '', {
-                    fontSize: '12px',
+                    fontSize: '16px',
                     fill: '#ff00ff', // Set to price line color
                     fontFamily: 'Roboto, sans-serif',
                     align: 'center'
@@ -204,7 +204,7 @@ export default class Terrain {
         if (!this.priceTextsInitialized) {
             for (let i = 0; i < numPricePoints; i++) {
                 const text = this.scene.add.text(0, 0, '', {
-                    fontSize: '14px',
+                    fontSize: '16px',
                     fill: '#ff00ff', // Set to price line color
                     fontFamily: 'Roboto, sans-serif',
                     align: 'right'

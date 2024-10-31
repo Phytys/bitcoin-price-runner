@@ -80,7 +80,7 @@ export default class Events {
 
             // Create and attach a label to the event sprite
             const label = this.scene.add.text(x, y - 40 * this.scene.spriteScale, eventData.event, {
-                fontSize: `${20 * this.scene.spriteScale}px`, // Adjust font size
+                fontSize: `${25 * this.scene.spriteScale}px`, // Adjust font size
                 fontStyle: 'bold', // Bold text
                 fill: '#ffffff',
                 fontFamily: 'Roboto, sans-serif',
