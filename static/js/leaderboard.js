@@ -27,6 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching leaderboard:', error));
     }
 
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
     function updateLeaderboardTable(entries) {
         const tableBody = leaderboardTable.querySelector('tbody');
         tableBody.innerHTML = '';
@@ -34,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = tableBody.insertRow();
             row.innerHTML = `
                 <td>${(currentPage - 1) * 10 + index + 1}</td>
-                <td>${entry.player_name}</td>
-                <td>${entry.score}</td>
+                <td>${escapeHtml(entry.player_name)}</td>
+                <td>${Number(entry.score).toLocaleString()}</td>
                 <td>${entry.hodl ? 'Yes' : 'No'}</td>
                 <td>${new Date(entry.timestamp).toLocaleString()}</td>
             `;

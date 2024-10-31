@@ -102,7 +102,7 @@ def cached_bitcoin_events():
 
 @app.route('/')
 def index():
-    return render_template('index.html')  # This serves the landing page
+    return render_template('index.html', config=app.config)
 
 @app.route('/game')
 def game():
@@ -255,6 +255,7 @@ def submit_score():
 
 # Route to get the leaderboard
 @app.route('/leaderboard')
+@limiter.limit("30 per minute")
 def leaderboard():
     page = request.args.get('page', 1, type=int)
     per_page = 10

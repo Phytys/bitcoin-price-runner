@@ -265,7 +265,14 @@
     </footer>
 
     <!-- Include any required JavaScript libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% if config['ENV'] == 'production' %}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js" 
+                integrity="sha384-0hoVsJ+3bKxKxYn4+IXzxGhqKxjKxfBqJJJcyYlqctEPvl/D" 
+                crossorigin="anonymous">
+        </script>
+    {% else %}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    {% endif %}
     <!-- Include a script to render the Bitcoin price chart -->
     <script src="{{ url_for('static', filename='js/price_chart.js') }}"></script>
     <script src="{{ url_for('static', filename='js/leaderboard.js') }}"></script>
