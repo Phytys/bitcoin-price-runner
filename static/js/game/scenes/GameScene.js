@@ -57,6 +57,7 @@ export default class GameScene extends Phaser.Scene {
         this.enemySpritesGroup = null;
         this.spriteScale = 1.0;
         this.lastUpdateTime = 0;
+        this.scoreMultiplier = 1.0;
 
         console.log('GameScene constructor called');
     }
@@ -372,6 +373,7 @@ export default class GameScene extends Phaser.Scene {
 
                     // Update speed effect text
                     this.uiManager.updateSpeedEffectText(this.userSpeed);
+                    this.uiManager.updateJumpCostText(this.jumpPenalty, this.userSpeed);
                 }
 
                 // Apply scaling in the update loop if necessary
@@ -603,9 +605,14 @@ export default class GameScene extends Phaser.Scene {
         if (this.isGameRunning && !this.gameOver && !this.gameCompleted) {
             this.player.jump();
             this.jumpCount++;
-            this.score -= this.jumpPenalty;
-            this.uiManager.updateJumpCountText(this.jumpCount, this.jumpPenalty);
-            console.log(`Player jumped. Total jumps: ${this.jumpCount}`);
+            const speedAdjustedPenalty = this.jumpPenalty * this.scoreMultiplier;
+            this.score -= speedAdjustedPenalty;
+            this.uiManager.updateJumpCountText(
+                this.jumpCount, 
+                speedAdjustedPenalty,
+                this.scoreMultiplier
+            );
+            console.log(`Player jumped. Total jumps: ${this.jumpCount}, Penalty: ${speedAdjustedPenalty}`);
         }
     }
 
@@ -621,8 +628,7 @@ export default class GameScene extends Phaser.Scene {
                 console.log(`Initial score set to: ${this.score}`);
             } else {
                 const priceDifference = currentPrice - this.lastPrice;
-                const speedMultiplier = this.scrollSpeed;
-                this.score += priceDifference * speedMultiplier;
+                this.score += priceDifference * this.scoreMultiplier;
                 this.lastPrice = currentPrice;
             }
 
@@ -1001,8 +1007,14 @@ Enemies Hit: ${enemiesHitCount}`;
 
     setScrollSpeed(speed) {
         this.userSpeed = speed;
-        this.scrollSpeed = this.baseScrollSpeed * this.userSpeed;
-        console.log(`Scroll speed set to: ${this.scrollSpeed} (base: ${this.baseScrollSpeed}, user: ${this.userSpeed})`);
+        this.scoreMultiplier = speed;
+        this.scrollSpeed = this.baseScrollSpeed;
+        console.log('setScrollSpeed:', {
+            jumpPenalty: this.jumpPenalty,
+            scoreMultiplier: this.scoreMultiplier
+        });
+        this.uiManager.updateSpeedEffectText(this.userSpeed);
+        this.uiManager.updateJumpCostText(this.jumpPenalty, this.scoreMultiplier);
     }
 
     pauseScene() {

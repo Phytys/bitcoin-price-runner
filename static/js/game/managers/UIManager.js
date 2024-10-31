@@ -9,6 +9,7 @@ export default class UIManager {
         this.dateText = null;
         this.priceText = null;
         this.speedEffectText = null; // New property for speed effect
+        this.jumpCostText = null;
         this.jumpCountText = null;
         this.enemiesHitText = null;
         this.gameOverText = null;
@@ -162,8 +163,7 @@ Enemies Hit: ${enemiesHitCount}`;
 
     // New method to update the speed effect text
     updateSpeedEffectText(speedMultiplier) {
-        const speedEffectMessage = `Speed Multiplier: x${speedMultiplier.toFixed(1)}
-Score changes are multiplied by this factor.`;
+        const speedEffectMessage = `Speed Multiplier: x${speedMultiplier.toFixed(1)}`;
         if (this.speedEffectText) {
             this.speedEffectText.setText(speedEffectMessage);
         } else {
@@ -187,7 +187,7 @@ Score changes are multiplied by this factor.`;
         } else {
             this.scoreText = this.scene.add.text(
                 16,
-                120, // Adjusted position to account for speed effect text
+                145, // Adjusted position to account for jump cost text
                 `Score: $${score.toFixed(2)}`,
                 {
                     fontSize: '18px',
@@ -199,21 +199,12 @@ Score changes are multiplied by this factor.`;
         }
     }
 
-    updateJumpCountText(jumpCount, jumpPenalty) {
+    updateJumpCountText(jumpCount, penalty, speed) {
         if (this.jumpCountText) {
-            this.jumpCountText.setText(`Jumps: ${jumpCount} (-$${jumpPenalty} per jump)`);
-        } else {
-            this.jumpCountText = this.scene.add.text(
-                16,
-                150, // Adjusted position
-                `Jumps: ${jumpCount} (-$${jumpPenalty} per jump)`,
-                {
-                    fontSize: '18px',
-                    fill: this.priceLineColor,
-                    fontFamily: 'Roboto, sans-serif',
-                    align: 'left'
-                }
-            ).setOrigin(0, 0);
+            const formattedPenalty = Math.round(penalty).toLocaleString();
+            this.jumpCountText.setText(
+                `Jumps: ${jumpCount} (Last Penalty: $${formattedPenalty} at ${speed.toFixed(1)}x)`
+            );
         }
     }
 
@@ -223,7 +214,7 @@ Score changes are multiplied by this factor.`;
         } else {
             this.enemiesHitText = this.scene.add.text(
                 16,
-                180, // Adjusted position
+                205, // Adjusted position
                 `Enemies Hit: ${enemiesHitCount}`,
                 {
                     fontSize: '18px',
@@ -281,7 +272,7 @@ Score changes are multiplied by this factor.`;
         }
         if (this.scoreText) {
             this.scoreText.setFontSize(18 * scale);
-            this.scoreText.setPosition(16 * scale, 120 * scale);
+            this.scoreText.setPosition(16 * scale, 145 * scale);
             this.scoreText.setFill(this.priceLineColor);
         }
         if (this.jumpCountText) {
@@ -301,6 +292,11 @@ Score changes are multiplied by this factor.`;
                 icon.setPosition(16 * scale + (iconSize + spacing) * index, 210 * scale);
                 icon.setScale(0.5 * scale);
             });
+        }
+        if (this.jumpCostText) {
+            this.jumpCostText.setFontSize(18 * scale);
+            this.jumpCostText.setPosition(16 * scale, 95 * scale);
+            this.jumpCostText.setFill(this.priceLineColor);
         }
     }
 
@@ -338,5 +334,31 @@ Score changes are multiplied by this factor.`;
         this.livesIcons.forEach((icon, index) => {
             icon.setVisible(index < initialLives);
         });
+    }
+
+    updateJumpCostText(baseJumpPenalty, speedMultiplier) {
+        console.log('updateJumpCostText inputs:', {
+            baseJumpPenalty,
+            speedMultiplier
+        });
+        const currentJumpCost = Math.round(baseJumpPenalty * speedMultiplier);
+        console.log('calculated currentJumpCost:', currentJumpCost);
+        const jumpCostMessage = `Current Jump Cost: $${currentJumpCost.toLocaleString()}`;
+        
+        if (this.jumpCostText) {
+            this.jumpCostText.setText(jumpCostMessage);
+        } else {
+            this.jumpCostText = this.scene.add.text(
+                16,
+                95,
+                jumpCostMessage,
+                {
+                    fontSize: '18px',
+                    fill: this.priceLineColor,
+                    fontFamily: 'Roboto, sans-serif',
+                    align: 'left'
+                }
+            ).setOrigin(0, 0);
+        }
     }
 }
