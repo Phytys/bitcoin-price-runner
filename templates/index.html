@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bitcoin Price Runner - Interactive Bitcoin History Game | Learn While Playing</title>
+    <title>Bitcoin Price Runner - Experience Bitcoin's Epic Journey | Runner Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Link to the CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
@@ -13,22 +13,22 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Primary Meta Tags -->
-    <meta name="title" content="Bitcoin Price Runner - Interactive Bitcoin History Game">
-    <meta name="description" content="Experience Bitcoin's historical journey through an exciting runner game. Navigate price movements, avoid bears, collect bonuses, and learn about key Bitcoin events while playing.">
+    <meta name="title" content="Bitcoin Price Runner - Experience Bitcoin's Epic Journey">
+    <meta name="description" content="Run through Bitcoin's incredible price history in this exciting runner game! Jump over market crashes, shoot down distractions, and collect real Bitcoin events as you race from 2010 to 2025.">
     <meta name="keywords" content="Bitcoin game, crypto game, Bitcoin history, Bitcoin price, educational game, runner game, blockchain game">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bitcoinpricerunner.com/">
-    <meta property="og:title" content="Bitcoin Price Runner - Experience Bitcoin's Journey">
-    <meta property="og:description" content="Navigate through Bitcoin's price history in this educational runner game. Learn about key events, avoid market crashes, and experience the Bitcoin journey firsthand.">
+    <meta property="og:title" content="Bitcoin Price Runner - Experience Bitcoin's Epic Journey">
+    <meta property="og:description" content="Run through Bitcoin's incredible price history in this exciting runner game! Jump over market crashes, shoot down distractions, and collect real Bitcoin events as you race from 2010 to 2025.">
     <meta property="og:image" content="{{ url_for('static', filename='assets/images/large/game-screenshot.png', _external=True) }}">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://bitcoinpricerunner.com/">
-    <meta name="twitter:title" content="Bitcoin Price Runner - Interactive History Game">
-    <meta name="twitter:description" content="Play through Bitcoin's history! Jump over bears, orange-pill nocoiners, and learn about key Bitcoin events in this exciting runner game.">
+    <meta name="twitter:title" content="Bitcoin Price Runner - Experience Bitcoin's Epic Journey">
+    <meta name="twitter:description" content="Run through Bitcoin's incredible price history in this exciting runner game! Jump over market crashes, shoot down distractions, and collect real Bitcoin events as you race from 2010 to 2025.">
     <meta name="twitter:image" content="{{ url_for('static', filename='assets/images/large/game-screenshot.png', _external=True) }}">
     
     <!-- Canonical URL -->
@@ -85,8 +85,8 @@
 
     <section class="hero" aria-label="Game Introduction">
         <div class="container">
-            <h1>Experience the Thrill of Bitcoin's Journey</h1>
-            <p>Navigate through the highs and lows of Bitcoin's price history in this exciting educational runner game. Learn about key events while having fun!</p>
+            <h1>Experience Bitcoin's Epic Journey</h1>
+            <p>Run through Bitcoin's incredible price history in this exciting runner game! Jump over market crashes, shoot down distractions, and collect real Bitcoin events as you race from 2010 to 2025.</p>
             <a href="{{ url_for('game') }}" class="play-button" aria-label="Start Playing Bitcoin Price Runner">Play Now</a>
         </div>
     </section>
@@ -102,11 +102,11 @@
 
     <section id="game-description" class="game-description">
         <div class="container">
-            <h2>Game Description</h2>
+            <h2>Game Overview</h2>
             <div class="description-grid">
                 <div class="description-item">
-                    <h3>Overview</h3>
-                    <p>Bitcoin Price Runner is a thrilling game where you navigate a character through the historical price movements of Bitcoin. Survive drawdowns, collect bonuses, and experience the volatility of the Bitcoin market firsthand.</p>
+                    <h3>What You Do</h3>
+                    <p>Run along Bitcoin's actual price chart from 2010 to 2025! Your score follows Bitcoin's price movements - gain points when it goes up, lose points when it goes down. Jump over market crashes, shoot down distractions, and collect real Bitcoin events to boost your score!</p>
                 </div>
             </div>
         </div>
@@ -114,35 +114,39 @@
 
     <section id="score-mechanics" class="score-mechanics">
         <div class="container">
-            <h2>Score Mechanics</h2>
+            <h2>How to Score Points</h2>
             <div class="mechanics-grid">
                 <div class="mechanics-item">
-                    <h3>Price Movement</h3>
+                    <h3>💰 Follow Bitcoin's Price</h3>
                     <ul>
-                        <li>Score increases with positive price movements</li>
-                        <li>Speed slider multiplies your score changes (leverage)</li>
+                        <li>Start with Bitcoin's price at the beginning</li>
+                        <li>Gain points when Bitcoin price goes up</li>
+                        <li>Lose points when Bitcoin price goes down</li>
+                        <li>Speed multiplies your gains and losses!</li>
                     </ul>
                 </div>
                 <div class="mechanics-item">
-                    <h3>Jump and Fly</h3>
+                    <h3>🦘 Jumping Has a Cost</h3>
                     <ul>
-                        <li>Base jump penalty: $150</li>
-                        <li>Penalty scales with speed (e.g., 2x speed = $300 penalty)</li>
+                        <li>Each jump costs $150 points</li>
+                        <li>Faster speed = higher costs (2x speed = $300 per jump)</li>
+                        <li>Jump only when you need to avoid crashes!</li>
                     </ul>
                 </div>
                 <div class="mechanics-item">
-                    <h3>Enemies</h3>
+                    <h3>🎯 Shoot Down Enemies</h3>
                     <ul>
-                        <li>Orange-pill altcoin distractors to gain points</li>
-                        <li>Orange-pill fiat maxis for higher points</li>
-                        <li>Jump over drawdown bears to keep going</li>
+                        <li>Altcoin distractors: +700 points</li>
+                        <li>Fiat maximalists: +1000 points</li>
+                        <li>Use Bitcoin pills to defeat them!</li>
                     </ul>
                 </div>
                 <div class="mechanics-item">
-                    <h3>Events</h3>
+                    <h3>📈 Collect Bitcoin Events</h3>
                     <ul>
-                        <li>Navigate through Bitcoin's history</li>
-                        <li>Events can boost or reduce your score</li>
+                        <li>Good events: +1000 to +3000 points</li>
+                        <li>Bad events: -1000 to -2000 points</li>
+                        <li>These are real historical Bitcoin events!</li>
                     </ul>
                 </div>
             </div>
@@ -154,32 +158,36 @@
             <h2>Game Controls</h2>
             <div class="controls-grid">
                 <div class="control-item">
-                    <h3>Keyboard Controls</h3>
+                    <h3>🦘 Jump</h3>
                     <ul>
-                        <li>↑ (Up Arrow) or Click/Tap Screen: Jump</li>
-                        <li>SPACE: Shoot Bitcoin Pills</li>
+                        <li>↑ Arrow or Click/Tap: Jump over obstacles</li>
+                        <li>Costs $150 points per jump</li>
+                        <li>Jump only when you see bear obstacles!</li>
                     </ul>
                 </div>
                 <div class="control-item">
-                    <h3>Touch Controls</h3>
+                    <h3>🎯 Shoot</h3>
                     <ul>
-                        <li>JUMP Button: Jump/Multi-jump</li>
-                        <li>Orange Pill Button: Shoot Bitcoin Pills</li>
+                        <li>SPACE: Shoot Bitcoin pills at enemies</li>
+                        <li>Defeat altcoin distractors and fiat maximalists</li>
+                        <li>Earn points for each enemy defeated</li>
                     </ul>
                 </div>
                 <div class="control-item">
-                    <h3>Game Speed</h3>
+                    <h3>⚡ Speed Control</h3>
                     <ul>
-                        <li>Use the Speed Slider to adjust game speed (0.5x - 2.5x)</li>
-                        <li>Higher speeds multiply both score changes and jump penalties!</li>
-                        <li>Choose your strategy: high risk, high reward</li>
+                        <li>Speed slider: 0.5x to 2.5x</li>
+                        <li>Faster = bigger gains AND bigger losses</li>
+                        <li>Higher jump costs at faster speeds</li>
+                        <li>Choose your risk level!</li>
                     </ul>
                 </div>
                 <div class="control-item">
-                    <h3>Additional Controls</h3>
+                    <h3>🎮 Game Flow</h3>
                     <ul>
-                        <li>Start/Stop: Begin or end your game</li>
-                        <li>Pause/Resume: Take a break when needed</li>
+                        <li>Start: Begin your Bitcoin journey</li>
+                        <li>Pause: Take a break anytime</li>
+                        <li>Goal: Survive from 2010 to 2025!</li>
                     </ul>
                 </div>
             </div>
@@ -219,42 +227,42 @@
 
     <section id="game-characters" class="game-characters">
         <div class="container">
-            <h2>Description of Game Characters</h2>
+            <h2>Game Characters</h2>
             <div class="character-grid">
                 <div class="character-item">
                     <img src="{{ url_for('static', filename='assets/images/large/player_large.png') }}" alt="Player character running through Bitcoin price chart" loading="lazy">
-                    <h3>Player</h3>
-                    <p>Navigate through Bitcoin's price history events. Avoid bears and pill enemies.</p>
+                    <h3>You - The Runner</h3>
+                    <p>Run along Bitcoin's actual price chart from 2010 to 2025! Your score follows Bitcoin's price movements.</p>
                 </div>
                 <div class="character-item">
-                    <img src="{{ url_for('static', filename='assets/images/large/obstacle_large.png') }}" alt="Bear market obstacle representing Bitcoin price drawdowns" loading="lazy">
-                    <h3>Drawdown-Bear</h3>
-                    <p>Represents market drawdowns. Jump over these to avoid losing lives.</p>
+                    <img src="{{ url_for('static', filename='assets/images/large/obstacle_large.png') }}" alt="Bear market obstacle" loading="lazy">
+                    <h3>🐻 Market Crashes</h3>
+                    <p>Jump over these bear obstacles or lose a life! These represent real Bitcoin market crashes throughout history.</p>
                 </div>
                 <div class="character-item">
-                    <img src="{{ url_for('static', filename='assets/images/large/enemy_2_large.png') }}" alt="Fiat maximalist enemy character that players can defeat" loading="lazy">
-                    <h3>Fiat-Maxi</h3>
-                    <p>A tougher enemy. Defeat them for higher points and demonstrate Bitcoin's superiority.</p>
+                    <img src="{{ url_for('static', filename='assets/images/large/enemy_2_large.png') }}" alt="Fiat maximalist enemy" loading="lazy">
+                    <h3>💸 Fiat Maximalists</h3>
+                    <p>Shoot these for +1000 points! They represent people who don't understand Bitcoin's value.</p>
                 </div>
                 <div class="character-item">
-                    <img src="{{ url_for('static', filename='assets/images/large/enemy_1_large.png') }}" alt="Altcoin distractor enemy that can be defeated for points" loading="lazy">
-                    <h3>Altcoin-Distractor</h3>
-                    <p>Basic enemy. Defeat them to gain points and clear misconceptions about Bitcoin.</p>
+                    <img src="{{ url_for('static', filename='assets/images/large/enemy_1_large.png') }}" alt="Altcoin distractor enemy" loading="lazy">
+                    <h3>🪙 Altcoin Distractors</h3>
+                    <p>Shoot these for +700 points! They represent altcoins that distract from Bitcoin.</p>
                 </div>
                 <div class="character-item">
-                    <img src="{{ url_for('static', filename='assets/images/large/bullet_pill_large.png') }}" alt="Orange pill projectile used to defeat enemies" loading="lazy">
-                    <h3>Bitcoin Pill</h3>
-                    <p>Your weapon against enemies. Use it to orange-pill Altcoin and Fiat distractors.</p>
+                    <img src="{{ url_for('static', filename='assets/images/large/bullet_pill_large.png') }}" alt="Bitcoin pill projectile" loading="lazy">
+                    <h3>🧡 Bitcoin Pills</h3>
+                    <p>Your weapon! Use these to "orange pill" enemies and help them understand Bitcoin's value.</p>
                 </div>
                 <div class="character-item">
-                    <img src="{{ url_for('static', filename='assets/images/large/bitcoin_event_positive_large.png') }}" alt="Positive Bitcoin event collectible that boosts score" loading="lazy">
-                    <h3>Positive Bitcoin Event</h3>
-                    <p>Represents positive news or developments. Collect these for score boosts.</p>
+                    <img src="{{ url_for('static', filename='assets/images/large/bitcoin_event_positive_large.png') }}" alt="Positive Bitcoin event" loading="lazy">
+                    <h3>📈 Good News</h3>
+                    <p>Collect these for big score boosts! Real events like halvings, ETF approvals, and major adoptions.</p>
                 </div>
                 <div class="character-item">
-                    <img src="{{ url_for('static', filename='assets/images/large/bitcoin_event_negative_large.png') }}" alt="Negative Bitcoin event obstacle that reduces score" loading="lazy">
-                    <h3>Negative Bitcoin Event</h3>
-                    <p>Represents negative news or FUD. Avoid these to prevent score penalties.</p>
+                    <img src="{{ url_for('static', filename='assets/images/large/bitcoin_event_negative_large.png') }}" alt="Negative Bitcoin event" loading="lazy">
+                    <h3>📉 Bad News</h3>
+                    <p>Avoid these to prevent score penalties! Real events like exchange collapses and government bans.</p>
                 </div>
             </div>
         </div>

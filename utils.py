@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 def get_historical_bitcoin_data():
     """Load historical Bitcoin price data from a CSV file."""
-    df = pd.read_csv('bitcoin_historical.csv', delimiter=";")
+    df = pd.read_csv('bitcoin_historical_merged.csv', delimiter=",")
 
     # Convert 'Start' column to datetime
     df['Start'] = pd.to_datetime(df['Start'])
